@@ -18,7 +18,8 @@ namespace HypermediaClient {
         }
 
         [Route("orders/create")]
-        [HttpPost]
+     //   [HttpPost]
+        [HttpGet]
         public async Task<ActionResult> Create() {
             var order = new Order() { Number = Db.Orders.Any() ? Db.Orders.Max(x => x.Number) + 1 : 1 };
             await Db.AddAsync(order);
