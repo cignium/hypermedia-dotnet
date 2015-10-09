@@ -71,14 +71,22 @@
     <Compile Include="ControllerActionLink.cs" />
     <Compile Include="ControllerActionUrlResolver.cs" />
     <Compile Include="DocumentResult.cs" />
+    <Compile Include="HypermediaActionResult.cs" />
+    <Compile Include="HypermediaType.cs" />
+    <Compile Include="HypermediaTypeSerializer.cs" />
     <Compile Include="HypermediaValue.cs" />
     <Compile Include="IControllerActionUrlResolver.cs" />
+    <Compile Include="IHypermediaType.cs" />
+    <Compile Include="IHypermediaResource.cs" />
+    <Compile Include="IHypermediaValue.cs" />
+    <Compile Include="ILinkFilter.cs" />
     <Compile Include="ResolvedLink.cs" />
     <Compile Include="UnResolvedLink.cs" />
-    <Compile Include="HypermediaResult.cs" />
+    <Compile Include="HypermediaResource.cs" />
     <Compile Include="LinkRels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleUrlLink.cs" />
+    <Compile Include="UnResolvedLinkResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

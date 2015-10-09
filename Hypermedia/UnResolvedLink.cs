@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Hypermedia {
     public abstract class UnResolvedLink {
@@ -10,5 +11,9 @@ namespace Hypermedia {
         public string Rel { get; }
         public string Title { get; }
         public abstract Uri Resolve(IControllerActionUrlResolver resolver);
+
+        public virtual bool IsValid(IEnumerable<ILinkFilter> filters) {
+            return true;
+        }
     }
 }

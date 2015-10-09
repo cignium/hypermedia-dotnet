@@ -5,11 +5,8 @@ namespace HypermediaClient.Results {
     public class OrderResult : DocumentResult {
         public HypermediaValue<int> Number { get; set; }
         public HypermediaValue<DateTimeOffset> CreatedDate { get; set; }
-        public AddressValue Address { get; set; }
-    }
-
-    public class AddressValue : HypermediaValue<AddressValue> {
-        public HypermediaValue<string> Street { get; set; }
-        public HypermediaValue<string> City { get; set; }
+        public AddressValue HeadOfficeAddress { get; set; }
+        public Address DeliveryAddress { get; set; }
+        protected override DocumentResult Self => this;
     }
 }

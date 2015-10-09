@@ -1,6 +1,5 @@
 namespace Hypermedia {
-    public class DocumentResult : HypermediaResult<DocumentResult> {
+    public abstract class DocumentResult : HypermediaResource<DocumentResult> {
         public override string Profile => "document";
-        protected override DocumentResult Self => this;
     }
 }

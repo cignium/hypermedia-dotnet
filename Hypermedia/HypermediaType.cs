@@ -1,51 +1,25 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using System.Web.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Hypermedia {
-    public abstract class HypermediaResult<T> : ActionResult {
-        protected HypermediaResult() {
-            UnResolvedLinks = new List<UnResolvedLink>();
-            Links = new List<ResolvedLink>();
+    public abstract class HypermediaType<T> : IHypermediaType where T : class {
+        protected HypermediaType() {
+            Links = new List<UnResolvedLink>();
+            Errors = new List<string>();
         }
 
-        [JsonIgnore]
-        public abstract string Profile { get; }
         protected abstract T Self { get; }
-        [JsonIgnore]
-        public string MediaType => $"application/vnd.cignium.resource+json;profile={Profile}";
-        [JsonIgnore]
-        public IList<UnResolvedLink> UnResolvedLinks { get; }
-        public IList<ResolvedLink> Links { get; }
+        public IList<UnResolvedLink> Links { get; }
+        public IList<string> Errors { get; }
 
-        public override void ExecuteResult(ControllerContext context) {
-            var response = context.HttpContext.Response;
-            var settings = new JsonSerializerSettings {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
-
-            var resolver = new ControllerActionUrlResolver(
-                new UrlHelper(context.RequestContext),
-                context.HttpContext.Request.Url.Scheme,
-                context.Controller.ControllerContext.RouteData.Values["controller"].ToString());
-
-            foreach (var unResolvedLink in UnResolvedLinks) {
-                Links.Add(new ResolvedLink(unResolvedLink.Rel, unResolvedLink.Title, unResolvedLink.Resolve(resolver)));
-            }
-
-            response.ContentType = MediaType;
-            response.Write(JsonConvert.SerializeObject(this, settings));
-        }
 
         public T WithSimpleUrl(string rel, string title, Uri href, bool ignore = false) {
             if (ignore) {
                 return Self;
             }
-            UnResolvedLinks.Add(new SimpleUrlLink(rel, title, href));
+            Links.Add(new SimpleUrlLink(rel, title, href));
             return Self;
         }
 
@@ -134,7 +108,7 @@ namespace Hypermedia {
                 return Self;
             }
 
-            UnResolvedLinks.Add(link);
+            Links.Add(link);
             return Self;
         }
     }

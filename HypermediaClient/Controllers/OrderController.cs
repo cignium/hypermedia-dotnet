@@ -18,7 +18,7 @@ namespace HypermediaClient {
         }
 
         [Route("orders/create")]
-     //   [HttpPost]
+        //   [HttpPost]
         [HttpGet]
         public async Task<ActionResult> Create() {
             var order = new Order() { Number = Db.Orders.Any() ? Db.Orders.Max(x => x.Number) + 1 : 1 };
@@ -37,10 +37,21 @@ namespace HypermediaClient {
 
             return new OrderResult() {
                 Number = order.Number,
-                CreatedDate = order.CreatedDate
+                CreatedDate = order.CreatedDate,
+                DeliveryAddress = order.DeliveryAddress,
+                HeadOfficeAddress = new AddressValue() {
+                    City = "New York"
+                }.WithUpdate(() => Patch(id, null))
             }
             .WithParent(() => All())
-            .WithAction(() => Create(), "Create New");
+            .WithAction(() => Create(), "Create New")
+            .CreateActionResult();
+        }
+
+        [HttpPost]
+        [Route("orders/{id}")]
+        public ActionResult Patch(Guid id, string data) {
+            return Get(id);
         }
     }
 }
