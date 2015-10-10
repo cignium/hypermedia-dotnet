@@ -35,17 +35,18 @@ namespace Acme.OrderManagement {
                 return HttpNotFound();
             }
 
-            return new OrderResult() {
+            var result = new OrderResult() {
                 Number = order.Number,
                 CreatedDate = order.CreatedDate,
                 DeliveryAddress = order.DeliveryAddress,
-                HeadOfficeAddress = new AddressValue() {
+                HeadOfficeAddress = new AddressResult() {
                     City = "New York"
                 }.WithUpdate(() => Patch(id, null))
             }
-            .WithParent(() => All())
-            .WithAction(() => Create(), "Create New")
-            .CreateActionResult();
+                .WithParent(() => All())
+                .WithAction(() => Create(), "Create New");
+
+            return result.CreateActionResult();
         }
 
         [HttpPost]

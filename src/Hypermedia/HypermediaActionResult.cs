@@ -19,7 +19,7 @@ namespace Hypermedia {
 
             // Todo add a way to register ILinkFilter
             var filters = new List<ILinkFilter>();
-            var untypedLinksResolver = new UnResolvedLinkResolver(resolver, filters);
+            var untypedLinksResolver = new UnresolvedLinkResolver(resolver, filters);
             var serializer = new HypermediaTypeSerializer(untypedLinksResolver);
             var instance = serializer.Serialize(_resource);
 

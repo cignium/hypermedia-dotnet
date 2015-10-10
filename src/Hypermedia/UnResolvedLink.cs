@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 
 namespace Hypermedia {
-    public abstract class UnResolvedLink {
-        protected UnResolvedLink(string rel, string title) {
+    public abstract class UnresolvedLink {
+        protected UnresolvedLink(string rel, string title) {
             Rel = rel;
             Title = title;
         }

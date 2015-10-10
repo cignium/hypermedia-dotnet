@@ -2,7 +2,7 @@
 
 namespace Hypermedia {
     public interface IHypermediaType {
-        IList<UnResolvedLink> Links { get; }
+        IList<UnresolvedLink> Links { get; }
         IList<string> Errors { get; } 
     }
 }

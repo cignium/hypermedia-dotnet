@@ -54,7 +54,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Results\AddressValue.cs" />
+    <Compile Include="Results\AddressResult.cs" />
     <Compile Include="Results\OrderResult.cs" />
   </ItemGroup>
   <ItemGroup>

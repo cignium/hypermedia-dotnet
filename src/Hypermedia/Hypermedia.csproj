@@ -70,7 +70,6 @@
   <ItemGroup>
     <Compile Include="ControllerActionLink.cs" />
     <Compile Include="ControllerActionUrlResolver.cs" />
-    <Compile Include="DocumentResult.cs" />
     <Compile Include="HypermediaActionResult.cs" />
     <Compile Include="HypermediaType.cs" />
     <Compile Include="HypermediaTypeSerializer.cs" />

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 
 namespace Hypermedia {
-    public class ControllerActionLink<T> : UnResolvedLink {
+    public class ControllerActionLink<T> : UnresolvedLink {
         public ControllerActionLink(string rel, string title, Expression<T> expression, string controller = null, object routeValues = null) : base(rel, title) {
             Expression = expression;
             Controller = controller;

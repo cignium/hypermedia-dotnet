@@ -4,14 +4,14 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Hypermedia {
-    public abstract class HypermediaType<T> : IHypermediaType where T : class {
+    public abstract class HypermediaType<T> : IHypermediaType where T : HypermediaType<T> {
         protected HypermediaType() {
-            Links = new List<UnResolvedLink>();
+            Links = new List<UnresolvedLink>();
             Errors = new List<string>();
         }
 
-        protected abstract T Self { get; }
-        public IList<UnResolvedLink> Links { get; }
+        private T Self => (T)this;
+        public IList<UnresolvedLink> Links { get; }
         public IList<string> Errors { get; }
 
 
@@ -103,7 +103,7 @@ namespace Hypermedia {
             return AddLink(new ControllerActionLink<Action>(rel, title, controllerAction, routeValues: routeValues), ignore);
         }
 
-        private T AddLink(UnResolvedLink link, bool ignore) {
+        private T AddLink(UnresolvedLink link, bool ignore) {
             if (ignore) {
                 return Self;
             }

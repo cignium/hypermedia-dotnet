@@ -1,5 +1,3 @@
-using System;
-
 namespace Hypermedia {
     public class HypermediaValue<T> : HypermediaType<HypermediaValue<T>>, IHypermediaValue {
         public HypermediaValue(T value) {
@@ -18,8 +16,6 @@ namespace Hypermedia {
                 return "string";
             }
         }
-
-        protected override HypermediaValue<T> Self => this;
 
         public static implicit operator HypermediaValue<T>(T value) {
             return new HypermediaValue<T>(value);

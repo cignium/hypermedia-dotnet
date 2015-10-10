@@ -8,13 +8,13 @@ using Newtonsoft.Json.Serialization;
 namespace Hypermedia {
     public class HypermediaTypeSerializer {
         private static readonly Type HypermediaValueType = typeof(HypermediaValue<>);
-        private readonly UnResolvedLinkResolver _resolver;
+        private readonly UnresolvedLinkResolver _resolver;
         // Todo make this configureable
         private static readonly JsonSerializer Serializer = new JsonSerializer() { ContractResolver = new CamelCasePropertyNamesContractResolver() };
         // Todo support these with attributes later on instead
         private static readonly string[] PropertyIgnoreList = new[] { "Links", "Errors", "Profile", "MediaType" };
 
-        public HypermediaTypeSerializer(UnResolvedLinkResolver resolver) {
+        public HypermediaTypeSerializer(UnresolvedLinkResolver resolver) {
             if (resolver == null) {
                 throw new ArgumentNullException(nameof(resolver));
             }
