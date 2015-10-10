@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HypermediaClient", "HypermediaClient\HypermediaClient.csproj", "{88D20BE2-9FCA-4413-B7FC-BD6E1804EE2D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.OrderManagement", "samples\Acme.OrderManagement\Acme.OrderManagement.csproj", "{88D20BE2-9FCA-4413-B7FC-BD6E1804EE2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hypermedia", "Hypermedia\Hypermedia.csproj", "{1A884C63-2471-4B0C-B2C9-5BD1C6771ABB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hypermedia", "src\Hypermedia\Hypermedia.csproj", "{1A884C63-2471-4B0C-B2C9-5BD1C6771ABB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

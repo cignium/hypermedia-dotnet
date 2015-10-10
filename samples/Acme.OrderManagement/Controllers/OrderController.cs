@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using HypermediaClient.Results;
+using Acme.OrderManagement.Results;
 
-namespace HypermediaClient {
+namespace Acme.OrderManagement {
     public class OrderController : Controller {
         public OrderController() {
             Db = new InMemoryDatabase();

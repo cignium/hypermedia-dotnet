@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HypermediaClient {
+namespace Acme.OrderManagement {
     public class Order {
         public Order() {
             Id = Guid.NewGuid();

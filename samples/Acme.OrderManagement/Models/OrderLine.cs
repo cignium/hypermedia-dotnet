@@ -1,4 +1,4 @@
-﻿namespace HypermediaClient {
+﻿namespace Acme.OrderManagement {
     public class OrderLine {
         public decimal Amount => UnitPrice * Units;
         public decimal UnitPrice { get; set; }

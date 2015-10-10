@@ -1,7 +1,7 @@
 ﻿using System;
 using Hypermedia;
 
-namespace HypermediaClient.Results {
+namespace Acme.OrderManagement.Results {
     public class OrderResult : DocumentResult {
         public HypermediaValue<int> Number { get; set; }
         public HypermediaValue<DateTimeOffset> CreatedDate { get; set; }
