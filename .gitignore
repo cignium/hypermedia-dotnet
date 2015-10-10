@@ -1,4 +1,13 @@
 .vs/
+*.DotSettings
+[Oo]bj/
+[Bb]in/
+.nuget/
+_ReSharper.*
 packages/
-bin/
-obj/
+artifacts/
+*.user
+*.suo
+*.userprefs
+*DS_Store
+*.sln.ide
