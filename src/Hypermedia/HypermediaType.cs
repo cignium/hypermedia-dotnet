@@ -2,25 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Hypermedia {
     public abstract class HypermediaType<T> : IHypermediaType where T : HypermediaType<T> {
         protected HypermediaType() {
             Links = new List<UnresolvedLink>();
             Errors = new List<string>();
+            Properties = new Dictionary<string, IHypermediaType>();
         }
 
+        [JsonIgnore]
         private T Self => (T)this;
         public IList<UnresolvedLink> Links { get; }
         public IList<string> Errors { get; }
+        public IDictionary<string, IHypermediaType> Properties { get; } 
 
 
         public T WithSimpleUrl(string rel, string title, Uri href, bool ignore = false) {
-            if (ignore) {
-                return Self;
-            }
-            Links.Add(new SimpleUrlLink(rel, title, href));
-            return Self;
+            return AddLink(new SimpleUrlLink(rel, title, href), ignore);
         }
 
         public T WithAction(Expression<Action> controllerAction, string title, object routeValues = null, bool ignore = false) {
@@ -87,6 +87,14 @@ namespace Hypermedia {
             return AddLink(controllerAction, LinkRel.Update, null, routeValues, ignore);
         }
 
+        public T ConfigureProperty(Expression<Func<T, decimal?>> memberExpression, Action<NumberValue> configureAction) {
+            var value = new NumberValue(5);
+            configureAction(value);
+
+            Properties.Add(GetPropertyName(memberExpression), value);
+            return Self;
+        }
+
         private T AddLink<TController>(Expression<Func<TController, Task>> controllerAction, string rel, string title, object routeValues, bool ignore) {
             return AddLink(new ControllerActionLink<Func<TController, Task>>(rel, title, controllerAction, typeof(TController).Name, routeValues), ignore);
         }
@@ -110,6 +118,11 @@ namespace Hypermedia {
 
             Links.Add(link);
             return Self;
+        }
+
+        private static string GetPropertyName<TProperty>(Expression<Func<T, TProperty>> exp) {
+            var expression = (MemberExpression)exp.Body;
+            return expression.Member.Name;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Hypermedia {
     public class HypermediaActionResult : ActionResult {
         private readonly IHypermediaResource _resource;
 
-        public HypermediaActionResult(IHypermediaResource resource) {
+        internal HypermediaActionResult(IHypermediaResource resource) {
             if (resource == null) throw new ArgumentNullException(nameof(resource));
             _resource = resource;
         }
