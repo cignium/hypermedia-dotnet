@@ -63,4 +63,12 @@ namespace Hypermedia {
 
         internal override string Type => "date";
     }
+
+    public class BooleanValue : HypermediaValue<DateTimeOffset?> {
+        public BooleanValue(object value) : base(value) { }
+
+        public BooleanValue(Func<object> valueResolver) : base(valueResolver) { }
+
+        internal override string Type => "bool";
+    }
 }

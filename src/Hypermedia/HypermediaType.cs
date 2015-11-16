@@ -46,6 +46,10 @@ namespace Hypermedia {
                 return new DateTimeValue(value);
             }
 
+            if (type == typeof(bool) || type == typeof(bool?)) {
+                return new BooleanValue(value);
+            }
+
             throw new NotSupportedException(type.ToString());
         }
     }
