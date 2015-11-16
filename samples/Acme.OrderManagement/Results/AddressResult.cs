@@ -1,8 +1,8 @@
 ﻿using Hypermedia;
 
 namespace Acme.OrderManagement.Results {
-    public class AddressResult : HypermediaType<AddressResult> {
+    public class AddressResult : HypermediaObject<AddressResult> {
         public string Street { get; set; }
-        public HypermediaValue<string> City { get; set; }
+        public string City { get; set; }
     }
 }

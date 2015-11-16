@@ -1,5 +1,5 @@
 ﻿namespace Hypermedia {
-    public abstract class HypermediaResource<T> : HypermediaType<T>, IHypermediaResource where T : HypermediaType<T> {
+    public abstract class HypermediaResource<T> : HypermediaObject<T>, IHypermediaResource where T : HypermediaType<T> {
         private const string MediaTypeString = "application/vnd.cignium.resource+json;";
         protected virtual string Profile { get; } = string.Empty;
 
@@ -10,4 +10,6 @@
             return new HypermediaActionResult(this);
         }
     }
+
+    public sealed class HypermediaResource : HypermediaResource<HypermediaResource> {}
 }

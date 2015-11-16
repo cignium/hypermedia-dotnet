@@ -1,5 +1,5 @@
 ﻿namespace Hypermedia {
-    internal interface IHypermediaResource : IHypermediaType {
+    internal interface IHypermediaResource  {
         string MediaType { get; }
     }
 }

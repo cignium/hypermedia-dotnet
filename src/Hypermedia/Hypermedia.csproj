@@ -70,12 +70,14 @@
   <ItemGroup>
     <Compile Include="ControllerActionLink.cs" />
     <Compile Include="ControllerActionUrlResolver.cs" />
+    <Compile Include="HypermediaObject.cs" />
+    <Compile Include="HypermediaObject`1.cs" />
     <Compile Include="HypermediaActionResult.cs" />
-    <Compile Include="HypermediaType.cs" />
+    <Compile Include="HypermediaType`1.cs" />
     <Compile Include="HypermediaTypeSerializer.cs" />
     <Compile Include="HypermediaValue.cs" />
     <Compile Include="IControllerActionUrlResolver.cs" />
-    <Compile Include="IHypermediaType.cs" />
+    <Compile Include="HypermediaType.cs" />
     <Compile Include="IHypermediaResource.cs" />
     <Compile Include="IHypermediaValue.cs" />
     <Compile Include="ILinkFilter.cs" />

@@ -1,18 +1,17 @@
 using System;
-using System.Linq.Expressions;
 
 namespace Hypermedia {
     public abstract class HypermediaValue<T> : HypermediaType<HypermediaValue<T>>, IHypermediaValue {
-        private readonly Expression<Func<T>> _valueResolver;
-        private readonly T _value;
+        private readonly Func<object> _valueResolver;
+        private readonly object _value;
 
         protected HypermediaValue() { }
 
-        protected HypermediaValue(T value) {
+        protected HypermediaValue(object value) {
             _value = value;
         }
 
-        protected HypermediaValue(Expression<Func<T>> valueResolver) {
+        protected HypermediaValue(Func<object> valueResolver) {
             if (valueResolver == null) {
                 throw new ArgumentNullException(nameof(valueResolver));
             }
@@ -22,10 +21,10 @@ namespace Hypermedia {
         public bool IsReadonly { get; set; }
         public string Format { get; set; }
 
-        public T Value {
+        public object Value {
             get {
                 if (_valueResolver != null) {
-                    return _valueResolver.Compile()();
+                    return _valueResolver();
                 }
 
                 return _value;
@@ -41,31 +40,26 @@ namespace Hypermedia {
     }
 
     public class NumberValue : HypermediaValue<decimal?> {
-        public NumberValue(decimal? value) : base(value) { }
+        public NumberValue(object value) : base(value) { }
 
-        public NumberValue() { }
-
-        public NumberValue(Expression<Func<decimal?>> valueResolver) : base(valueResolver) { }
+        public NumberValue(Func<object> valueResolver) : base(valueResolver) { }
 
         internal override string Type => "number";
     }
 
     public class StringValue : HypermediaValue<string> {
-        public StringValue(string value) : base(value) { }
+        public StringValue(object value) : base(value) { }
 
-        public StringValue() { }
 
-        public StringValue(Expression<Func<string>> valueResolver) : base(valueResolver) { }
+        public StringValue(Func<object> valueResolver) : base(valueResolver) { }
 
         internal override string Type => "string";
     }
 
     public class DateTimeValue : HypermediaValue<DateTimeOffset?> {
-        public DateTimeValue(DateTimeOffset? value) : base(value) { }
+        public DateTimeValue(object value) : base(value) { }
 
-        public DateTimeValue() { }
-
-        public DateTimeValue(Expression<Func<DateTimeOffset?>> valueResolver) : base(valueResolver) { }
+        public DateTimeValue(Func<object> valueResolver) : base(valueResolver) { }
 
         internal override string Type => "date";
     }

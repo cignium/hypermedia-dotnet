@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Acme.OrderManagement.Results;
+using Hypermedia;
 
 namespace Acme.OrderManagement {
     public class OrderController : Controller {
@@ -46,6 +47,9 @@ namespace Acme.OrderManagement {
                 .WithParent(() => All())
                 .WithAction(() => Create(), "Create New");
 
+            result.ConfigureProperty(x => x.Number, x => x.WithAction(() => Patch(id, ""), "")
+        );
+
             return result.CreateActionResult();
         }
 
@@ -53,6 +57,15 @@ namespace Acme.OrderManagement {
         [Route("orders/{id}")]
         public ActionResult Patch(Guid id, string data) {
             return Get(id);
+        }
+
+        [HttpGet]
+        [Route("orders/dynamic")]
+        public ActionResult DynamicResult() {
+            return new HypermediaResource()
+                .ConfigureProperty("Number", 10, (NumberValue x) => x.Format = "n2")
+                .ConfigureProperty("Name", 10, (StringValue x) => x.Format = "textarea")
+                .CreateActionResult();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Acme.OrderManagement {
         }
 
         public Guid Id { get; }
-        public int Number { get; set; }
+        public decimal Number { get; set; }
         public DateTimeOffset CreatedDate { get; }
         public Address DeliveryAddress { get; set; }
         public IList<OrderLine> Lines { get; }

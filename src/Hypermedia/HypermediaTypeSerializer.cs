@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -7,7 +8,6 @@ using Newtonsoft.Json.Serialization;
 
 namespace Hypermedia {
     public class HypermediaTypeSerializer {
-        private static readonly Type HypermediaValueType = typeof(HypermediaValue<>);
         private readonly UnresolvedLinkResolver _resolver;
         // Todo make this configureable
         private static readonly JsonSerializer Serializer = new JsonSerializer() { ContractResolver = new CamelCasePropertyNamesContractResolver() };
@@ -33,87 +33,71 @@ namespace Hypermedia {
 
             var properties = new JArray();
             jObject.Add("properties", properties);
+            var hypermediaObject = instance as HypermediaType ?? new HypermediaObject();
+
+            var addedProperties = new Dictionary<string, string>();
 
             foreach (var propertyInfo in type.GetProperties()) {
                 if (PropertyIgnoreList.Contains(propertyInfo.Name)) {
                     continue;
                 }
 
-                var property = GetProperty(propertyInfo, instance);
-                property.Add("name", GetPropertyName(propertyInfo));
+                var property = GetProperty(propertyInfo, instance, hypermediaObject);
+
+                addedProperties.Add(propertyInfo.Name, propertyInfo.Name);
+                property.Add("name", ToCamelCase(propertyInfo.Name));
+                properties.Add(property);
+            }
+
+            foreach (var hypermediaProperty in hypermediaObject.Properties) {
+                if (addedProperties.ContainsKey(hypermediaProperty.Key)) {
+                    continue;
+                }
+
+                var property = SerializeValueType(hypermediaProperty.Value);
+                property.Add("name", ToCamelCase(hypermediaProperty.Key));
                 properties.Add(property);
             }
 
             return jObject;
         }
 
-        private JObject GetProperty(PropertyInfo property, object instance) {
-            var value = instance == null ? null : property.GetValue(instance);
+        private JObject GetProperty(PropertyInfo property, object instance, HypermediaType hypermediaInstance) {
+            var value = instance != null ? property.GetValue(instance) : null;
 
             if (!property.PropertyType.IsValueType && property.PropertyType != typeof(string)) {
-                return CreateObject(property.PropertyType, property.GetCustomAttributes(true).Cast<Attribute>().ToArray(), property.GetValue(instance));
+                return CreateObject(property.PropertyType, property.GetCustomAttributes(true).Cast<Attribute>().ToArray(), value);
             }
 
-            var hypermediaType = GetOrCreateHypermediaType(property, instance, value);
+            HypermediaType type;
+            if (!hypermediaInstance.Properties.TryGetValue(property.Name, out type)) {
+                type = hypermediaInstance.ConfigureProperty(property, () => value);
+            }
 
-            AddAttributeSettings(hypermediaType, property);
-            return JObject.FromObject(hypermediaType, Serializer);
+            return SerializeValueType(type);
         }
 
-        private void AddAttributeSettings(IHypermediaType hypermediaType, PropertyInfo property) {
-            // Todo read Readonly attributes etc
+        private JObject SerializeValueType(HypermediaType type) {
+            var jObject = JObject.FromObject(type, Serializer);
+
+            jObject.Add("links", JArray.FromObject(_resolver.Resolve(type.Links), Serializer));
+            jObject.Add("errors", JArray.FromObject(type.Errors, Serializer));
+
+            return jObject;
         }
 
-        private string GetPropertyName(PropertyInfo property) {
-            // Todo read display attribute
-            return char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1);
+        private static string ToCamelCase(string name) {
+            return char.ToLowerInvariant(name[0]) + name.Substring(1);
         }
 
         private JObject CreateEmptyObject(object instance) {
             var jObject = new JObject();
-            var hypermediaType = instance as IHypermediaType;
+            var hypermediaType = instance as HypermediaType;
 
             jObject.Add("links", hypermediaType == null ? new JArray() : JArray.FromObject(_resolver.Resolve(hypermediaType.Links), Serializer));
             jObject.Add("errors", hypermediaType == null ? new JArray() : JArray.FromObject(hypermediaType.Errors, Serializer));
 
             return jObject;
-        }
-
-        private static IHypermediaType GetOrCreateHypermediaType(PropertyInfo property, object instance, object value) {
-            var parentHypermediaType = instance as IHypermediaType;
-
-            IHypermediaType hypermediaType;
-            if (parentHypermediaType != null && parentHypermediaType.Properties.TryGetValue(property.Name, out hypermediaType)) {
-                return hypermediaType;
-            }
-
-            if (property.PropertyType == typeof(string)) {
-                return new StringValue((string)value);
-            }
-
-            if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?)) {
-                return new NumberValue((decimal?)value);
-            }
-
-            if (property.PropertyType == typeof(DateTimeOffset) || property.PropertyType == typeof(DateTimeOffset?)) {
-                return new DateTimeValue((DateTimeOffset?)value);
-            }
-
-            throw new NotSupportedException($"Does not support {property.PropertyType} yet.");
-        }
-
-        private static bool TryGetHypermediaTypeGenericArgument(Type instanceType, out Type genericType) {
-            genericType = null;
-            var type = instanceType;
-            while (type != null) {
-                if (type.IsGenericType && type.GetGenericTypeDefinition() == HypermediaValueType) {
-                    genericType = type.GetGenericArguments()[0];
-                    return true;
-                }
-
-                type = type.BaseType;
-            }
-            return false;
         }
     }
 }
